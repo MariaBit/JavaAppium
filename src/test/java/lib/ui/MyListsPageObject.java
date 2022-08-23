@@ -1,6 +1,5 @@
 package lib.ui;
 
-import io.appium.java_client.AppiumDriver;
 import lib.Platform;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -9,6 +8,7 @@ abstract public class MyListsPageObject extends MainPageObject{
             FOLDER_BY_NAME_TPL,
             ARTICLE_BY_TITLE_TPL,
             ARTICLE_BY_SUBSTRING_TPL,
+            ARTICLE_IN_MY_LIST_XPATH,
             REMOVE_FROM_SAVED_BUTTON;
     private static String getFolderXpathByName(String name_of_folder)
     {
@@ -93,5 +93,10 @@ abstract public class MyListsPageObject extends MainPageObject{
     {
         String article_substring_xpath = getSavedArticleXpathBySubstring(article_substring);
         this.waitForElementAndClick(article_substring_xpath, "Cannot find article with title " + article_substring, 5);
+    }
+
+    public void clickRemainingArticle()
+    {
+        this.waitForElementAndClick(ARTICLE_IN_MY_LIST_XPATH, "Cannot find and click any article in My list ", 5);
     }
 }

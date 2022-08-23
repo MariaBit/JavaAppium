@@ -7,7 +7,7 @@ public class MWMyListsPageObject extends MyListsPageObject {
     static {
         FOLDER_BY_NAME_TPL = "xpath://*[@text='{FOLDER_NAME}']";
         ARTICLE_BY_TITLE_TPL = "xpath://ul[contains(@class, 'watchlist')]//h3[contains(text(),'{TITLE}']";
-        ARTICLE_BY_SUBSTRING_TPL = "";
+        ARTICLE_IN_MY_LIST_XPATH = "xpath://h3";
         REMOVE_FROM_SAVED_BUTTON = "xpath://*[@href='/w/index.php?title=Java_(programming_language)&action=unwatch']";
     }
     public MWMyListsPageObject(RemoteWebDriver driver)

@@ -194,6 +194,7 @@ abstract public class ArticlePageObject extends MainPageObject {
         this.waitForElementNotPresent(article_substring_xpath, "Article with requested substring " +article_substring + "supposed to be not presented ", 5);
     }
 
+
     public void assertArticleTitlePresent()
     {
         this.assertElementPresent(

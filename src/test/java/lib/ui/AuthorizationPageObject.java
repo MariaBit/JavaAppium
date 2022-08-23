@@ -16,18 +16,8 @@ public class AuthorizationPageObject extends MainPageObject {
     }
 
     public void clickAuthButton(){
-        this.waitForElementToRender(LOGIN_BUTTON,"Cannot render auth button", 5);
-        this.waitForElementToRender(LOGIN_BUTTON,"Cannot render auth button", 5);
-        this.waitForElementToRender(LOGIN_BUTTON,"Cannot render auth button", 5);
-        this.waitForElementToRender(LOGIN_BUTTON,"Cannot render auth button", 5);
-        this.waitForElementToRender(LOGIN_BUTTON,"Cannot render auth button", 5);
-        this.waitForElementToRender(LOGIN_BUTTON,"Cannot render auth button", 5);
-        this.waitForElementToRender(LOGIN_BUTTON,"Cannot render auth button", 5);
-        this.waitForElementToRender(LOGIN_BUTTON,"Cannot render auth button", 5);
-        this.waitForElementToRender(LOGIN_BUTTON,"Cannot render auth button", 5);
-        this.waitForElementToRender(LOGIN_BUTTON,"Cannot render auth button", 5);
-        this.waitForElementPresent(LOGIN_BUTTON,"Cannot find auth button", 5);
-        this.waitForElementAndClick(LOGIN_BUTTON,"Cannot find and click auth button", 5);
+        this.tryClickElementWithFewAttempts(LOGIN_BUTTON,"Cannot render auth button", 10);
+
 
 
     }

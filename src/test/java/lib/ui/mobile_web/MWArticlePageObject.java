@@ -18,7 +18,7 @@ public class MWArticlePageObject extends ArticlePageObject {
         CLOSE_ARTICLE_BUTTON = "xpath://android.widget.ImageButton[@content-desc='Navigate up']";
         FIRST_ARTICLE_TITLE = "id:org.wikipedia:id/page_list_item_title";
         THIRD_ARTICLE_TITLE = "xpath://android.widget.LinearLayout[3]/android.widget.LinearLayout/android.widget.TextView[1]";
-        SUBSTRING_TPL = "xpath://*[@text='{SUBSTRING}']";
+        SUBSTRING_TPL = "xpath://h3[text()='{SUBSTRING}']";
         ARTICLE_TITLE = "id:org.wikipedia:id/view_page_title_text";
     }
     public MWArticlePageObject(RemoteWebDriver driver)
