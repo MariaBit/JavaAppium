@@ -2,16 +2,20 @@ package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
+import io.qameta.allure.Attachment;
+import io.qameta.allure.Step;
 import lib.Platform;
+import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -24,6 +28,7 @@ public class MainPageObject {
         this.driver = driver;
     }
 
+    @Step("Waiting for element appearing on the screen")
     public WebElement waitForElementPresent(String locator, String error_message, long timeoutInSeconds)
     {
         By by = this.getLocatorByString(locator);
@@ -34,16 +39,19 @@ public class MainPageObject {
         );
     }
 
+    @Step("Waiting for element rendering on the screen")
     public void waitForElementToRender(String locator, String error_message, long timeoutInSeconds)
     {
         waitForElementPresent(locator, error_message, timeoutInSeconds);
     };
 
+    @Step("Waiting for element presenting on the screen")
     public WebElement waitForElementPresent(String locator, String error_message)
     {
         return waitForElementPresent(locator, error_message, 15);
     }
 
+    @Step("Waiting for element and clicking on it")
     public WebElement waitForElementAndClick(String locator, String error_message, long timeoutInSeconds)
     {
         WebElement element = waitForElementPresent(locator, error_message, timeoutInSeconds);
@@ -51,6 +59,7 @@ public class MainPageObject {
         return element;
     }
 
+    @Step("Waiting for input element and sending text")
     public WebElement waitForElementAndSendKeys(String locator, String value, String error_message, long timeoutInSeconds)
     {
         WebElement element = waitForElementPresent(locator, error_message, timeoutInSeconds);
@@ -58,6 +67,7 @@ public class MainPageObject {
         return element;
     }
 
+    @Step("Making sure that element is NOT presented on the screen")
     public boolean waitForElementNotPresent(String locator, String error_message, long timeoutInSeconds)
     {
         By by = this.getLocatorByString(locator);
@@ -68,12 +78,14 @@ public class MainPageObject {
         );
     }
 
+    @Step("Waiting for input element and cleaning input")
     public WebElement waitForElementAndClear(String locator, String error_message, long timeoutInSeconds){
         WebElement element = waitForElementPresent(locator,error_message, timeoutInSeconds);
         element.clear();
         return element;
     }
 
+    @Step("Comparing element has expected text")
     public void assertElementHasText(String locator, String expected_text, String error_message){
 
 
@@ -92,6 +104,7 @@ public class MainPageObject {
         );
     }
 
+    @Step("Swiping device screen up (method does nothing for Mobile Web")
     public void swipeUp(int timeOfSwipe){
         if (driver instanceof AppiumDriver){
             TouchAction action = new TouchAction((AppiumDriver)driver);
@@ -118,6 +131,7 @@ public class MainPageObject {
         swipeUp(200);
     }
 
+    @Step("Swiping screen up until element is not found")
     public void swipeUpToFindElement(String locator, String error_message, int max_swipes){
         By by = this.getLocatorByString(locator);
         driver.findElements(by);
@@ -136,6 +150,7 @@ public class MainPageObject {
         }
     }
 
+    @Step("Swiping to the left over element on device (step does nothing for Mobile Web")
     public void swipeElementToLeft(String locator, String error_message)
     {
         if (driver instanceof AppiumDriver){
@@ -151,7 +166,7 @@ public class MainPageObject {
 
         TouchAction action = new TouchAction((AppiumDriver)driver);
         action
-                .press(right_x, middle_y)
+                .press(right_x,middle_y)
                 .waitAction(1000)
                 .moveTo(left_x,middle_y)
                 .release()
@@ -169,6 +184,7 @@ public class MainPageObject {
         return elements.size();
     }
 
+    @Step("Making sure that element is NOT presented on the screen")
     public void assertElementNotPresent(String locator, String error_message)
     {
         int amount_of_elements = getAmountOfElements(locator);
@@ -178,6 +194,8 @@ public class MainPageObject {
         }
 
     }
+
+    @Step("Checking that element is NOT presented on the screen")
     public void assertElementPresent(String locator, String error_message)
     {
         int amount_of_elements = getAmountOfElements(locator);
@@ -210,6 +228,7 @@ public class MainPageObject {
         }
     }
 
+    @Step("Scrolling web page (method does nothing for android)")
     public void scrollWebPageUp(){
         if (Platform.getInstance().isMW()){
             JavascriptExecutor JSExecutor = (JavascriptExecutor) driver;
@@ -220,6 +239,7 @@ public class MainPageObject {
 
     }
 
+    @Step("Scrolling web page until element is found (method does nothing for android)")
     public void scrollWebPageTillElementNotVisible(String locator, String error_message,int max_swipes){
         int already_swiped = 0;
 
@@ -247,11 +267,13 @@ public class MainPageObject {
         return element_location_by_y < screen_size_by_y;
     }
 
+    @Step("Checking if element is presented on the screen")
     public boolean isElementPresent(String locator) {
         return getAmountOfElements(locator) > 0;
     }
 
 
+    @Step("Clicking element that is located on animated menu")
     public void tryClickElementWithFewAttempts (String locator, String error_message, int amount_of_attempts) {
         int current_attempts = 0;
         boolean need_more_attempts = true;
@@ -268,4 +290,32 @@ public class MainPageObject {
             ++ current_attempts;
         }
     }
+
+    @Step("Taking screenshot")
+    public String takeScreenshot(String name)
+    {
+        TakesScreenshot ts = (TakesScreenshot) this.driver;
+        File source = ts.getScreenshotAs(OutputType.FILE);
+        String path = System.getProperty("user.dir") + "/" + name + "_screenshot.png";
+        try {
+            FileUtils.copyFile(source, new File(path));
+            System.out.println("The screenshot was taken: " + path);
+        } catch (Exception e) {
+            System.out.println("Cannot take screenshot.Error: " + e.getMessage());
+        }
+        return  path;
+     }
+
+    @Step("Adding attachment")
+    @Attachment
+    public static byte[] screenshot(String path){
+        byte[] bytes = new byte[0];
+
+        try {
+            bytes = Files.readAllBytes(Paths.get(path));
+        } catch (IOException e) {
+            System.out.println("Cannot get bytes from screenshot. Error: " + e.getMessage());
+        }
+        return bytes;
+     }
 }

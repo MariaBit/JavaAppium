@@ -1,5 +1,6 @@
 package lib.ui;
 
+import io.qameta.allure.Step;
 import lib.Platform;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -34,7 +35,8 @@ abstract public class MyListsPageObject extends MainPageObject{
             super(driver);
         }
 
-        public void openFolderByName(String name_of_folder) {
+    @Step("Opening folder")
+    public void openFolderByName(String name_of_folder) {
             if (Platform.getInstance().isAndroid()){
             String folder_name_xpath = getFolderXpathByName(name_of_folder);
 
@@ -49,20 +51,25 @@ abstract public class MyListsPageObject extends MainPageObject{
             );} else {
                 System.out.println("Method openFolderByName() does nothing for platform" + Platform.getInstance().getPlatformVar());
             }
-        }
+    }
 
+    @Step("Waiting until article is presented on the screen")
     public void waitForArticleToAppearByTitle(String article_title)
     {
         String article_xpath = getFolderXpathByName(article_title);
         this.waitForElementPresent(article_xpath, "Cannot find saved article by title", 15);
 
     }
+
+    @Step("Waiting until article is disappeared")
     public void waitForArticleToDisappearByTitle(String article_title)
     {
         String article_xpath = getFolderXpathByName(article_title);
         this.waitForElementNotPresent(article_xpath, "Saved article is still presented", 15);
 
     }
+
+    @Step("Swiping article in order to delete it from My list")
         public void swipeByArticleToDelete(String article_title)
         {
 
@@ -89,12 +96,14 @@ abstract public class MyListsPageObject extends MainPageObject{
             this.waitForArticleToDisappearByTitle(article_title);
         }
 
+    @Step("Opening article in My list")
         public void openArticleInMyList(String article_substring)
     {
         String article_substring_xpath = getSavedArticleXpathBySubstring(article_substring);
         this.waitForElementAndClick(article_substring_xpath, "Cannot find article with title " + article_substring, 5);
     }
 
+    @Step("Clicking on remaining article in My list")
     public void clickRemainingArticle()
     {
         this.waitForElementAndClick(ARTICLE_IN_MY_LIST_XPATH, "Cannot find and click any article in My list ", 5);

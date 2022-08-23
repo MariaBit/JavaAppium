@@ -1,5 +1,7 @@
 package Tests;
 
+import io.qameta.allure.*;
+import io.qameta.allure.junit4.DisplayName;
 import lib.CoreTestCase;
 import lib.Platform;
 import lib.ui.*;
@@ -7,8 +9,10 @@ import lib.ui.factory.ArticlePageObjectFactory;
 import lib.ui.factory.MyListsPageObjectFactory;
 import lib.ui.factory.NavigationUIFactory;
 import lib.ui.factory.SearchPageObjectFactory;
+import org.junit.Assert;
 import org.junit.Test;
 
+@Epic("Account settings")
 public class MyListsTest extends CoreTestCase {
     private static final String name_of_folder = "Learning programming";
     private static final String
@@ -16,6 +20,11 @@ public class MyListsTest extends CoreTestCase {
             password = "Wikidummy951";
 
     @Test
+    @Features(value = {@Feature(value="My list"),@Feature(value="Article")})
+    @DisplayName("Add article to My list and delete it")
+    @Description("We add article to My list, checking that it was added. Then we delete this article and check that it was deleted.")
+    @Step("Starting test testSaveFirstArticleToMyList")
+    @Severity(value = SeverityLevel.NORMAL)
     public void testSaveFirstArticleToMyList(){
 
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
@@ -43,7 +52,7 @@ public class MyListsTest extends CoreTestCase {
 
             ArticlePageObject.waitForTitleElement();
 
-            assertEquals("We are not on the same page after login.",
+            Assert.assertEquals("We are not on the same page after login.",
                     article_title,
                     ArticlePageObject.getArticleTitle()
             );
@@ -61,6 +70,11 @@ public class MyListsTest extends CoreTestCase {
     }
 
     @Test
+    @Features(value = {@Feature(value="My list"),@Feature(value="Article")})
+    @DisplayName("Add two articles to My list and delete one")
+    @Description("We add two articles to My list, checking that they were added. Then we delete one article and check that it was delete successfully.")
+    @Step("Starting test testSaveTwoArticlesToMyListAndDeleteOne")
+    @Severity(value = SeverityLevel.NORMAL)
     public void testSaveTwoArticlesToMyListAndDeleteOne() {
 
         // Adding first article
@@ -89,7 +103,7 @@ public class MyListsTest extends CoreTestCase {
 
             ArticlePageObject.waitForTitleElement();
 
-            assertEquals("We are not on the same page after login.",
+            Assert.assertEquals("We are not on the same page after login.",
                     article_title,
                     ArticlePageObject.getArticleTitle()
             );
@@ -135,7 +149,7 @@ public class MyListsTest extends CoreTestCase {
             MyListsPageObject.clickRemainingArticle();
             ArticlePageObject.waitForTitleElement();
 
-            assertEquals("Remaining page is not " + article_title2 + "article.",
+            Assert.assertEquals("Remaining page is not " + article_title2 + "article.",
                     article_title2,
                     ArticlePageObject.getArticleTitle()
             );

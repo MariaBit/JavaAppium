@@ -1,5 +1,6 @@
 package lib.ui;
 
+import io.qameta.allure.Step;
 import lib.Platform;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -35,14 +36,17 @@ abstract public class ArticlePageObject extends MainPageObject {
         super(driver);
     }
 
+    @Step("Waiting for title on the article page")
     public WebElement waitForTitleElement()
     {
         return this.waitForElementPresent(TITLE, "Cannot find article title on page", 15);
     }
 
+    @Step("Getting article title")
     public String getArticleTitle()
     {
         WebElement title_element = waitForTitleElement();
+        screenshot(this.takeScreenshot("article_title"));
         if (Platform.getInstance().isAndroid()){
             return title_element.getAttribute("text");
         } else {
@@ -51,6 +55,7 @@ abstract public class ArticlePageObject extends MainPageObject {
 
     }
 
+    @Step("Swiping to footer on article page")
     public void swipeToFooter()
     {
         if (Platform.getInstance().isAndroid()) {
@@ -69,6 +74,7 @@ abstract public class ArticlePageObject extends MainPageObject {
 
     }
 
+    @Step("Adding the article to my list")
     public void addArticleToMyList(String name_of_folder) {
 
         this.waitForElementAndClick(
@@ -110,6 +116,7 @@ abstract public class ArticlePageObject extends MainPageObject {
         );
     }
 
+    @Step("Adding second article to my list")
     public void addNextArticleToMyList(String name_of_folder) {
 
         this.waitForElementAndClick(
@@ -133,7 +140,7 @@ abstract public class ArticlePageObject extends MainPageObject {
 
     }
 
-
+    @Step("Closing article for Android (this method does nothing for Mobile Web)")
     public void closeArticle()
     {
         if (Platform.getInstance().isAndroid()) {
@@ -154,6 +161,7 @@ abstract public class ArticlePageObject extends MainPageObject {
         );
     }
 
+    @Step("Comparing article title with expected title by id")
     public void assertArticleTitleHasTextById (String expected_article_title)
     {
         this.assertElementHasText(
@@ -163,6 +171,7 @@ abstract public class ArticlePageObject extends MainPageObject {
         );
     }
 
+    @Step("Comparing article title with expected title by xpath")
     public void assertArticleTitleHasTextByXpath (String expected_article_title)
     {
         this.assertElementHasText(
@@ -172,6 +181,7 @@ abstract public class ArticlePageObject extends MainPageObject {
         );
     }
 
+    @Step("Check that article title is not presented")
     public void waitForTitleToDisappear()
     {
         this.waitForElementNotPresent(
@@ -182,19 +192,21 @@ abstract public class ArticlePageObject extends MainPageObject {
 
     }
 
+    @Step("Waiting for article with substring presented")
     public void waitForArticleWithSubstringPresent (String article_substring)
     {
         String article_substring_xpath = getResultSearchElement(article_substring);
         this.waitForElementPresent(article_substring_xpath, "Cannot find article by requested substring" + article_substring, 5);
     }
 
+    @Step("Check that article with substring is not presented")
     public void waitForArticleWithSubstringNotPresent (String article_substring)
     {
         String article_substring_xpath = getResultSearchElement(article_substring);
         this.waitForElementNotPresent(article_substring_xpath, "Article with requested substring " +article_substring + "supposed to be not presented ", 5);
     }
 
-
+    @Step("Asserting expected article title with presented one")
     public void assertArticleTitlePresent()
     {
         this.assertElementPresent(
@@ -203,6 +215,7 @@ abstract public class ArticlePageObject extends MainPageObject {
         );
     }
 
+    @Step("Adding article to My lists")
     public void addArticlesToMySaved() {
 
         if (Platform.getInstance().isMW()) {
@@ -216,6 +229,7 @@ abstract public class ArticlePageObject extends MainPageObject {
         );
     }
 
+    @Step("Only for Mobile web: removing article from my list id it has been added")
     public void removeFromSavedIfItAdded (){
         if (this.isElementPresent(OPTIONS_REMOVE_FROM_MY_LIST_BUTTON)) {
             this.waitForElementAndClick(
